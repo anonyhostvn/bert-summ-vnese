@@ -192,7 +192,7 @@ def validate(args, device_id, pt, step):
     #            'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
 
     symbols = {'BOS': tokenizer.bos_token_id, 'EOS': tokenizer.eos_token_id,
-               'PAD': tokenizer.pad_token_id, 'EOQ': tokenizer.vocab_size + 1}
+               'PAD': tokenizer.pad_token_id, 'EOQ': 50}
 
     valid_loss = abs_loss(model.generator, symbols, model.vocab_size, train=False, device=device)
 
@@ -227,7 +227,7 @@ def test_abs(args, device_id, pt, step):
     #            'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
 
     symbols = {'BOS': tokenizer.bos_token_id, 'EOS': tokenizer.eos_token_id,
-               'PAD': tokenizer.pad_token_id, 'EOQ': tokenizer.vocab_size + 1}
+               'PAD': tokenizer.pad_token_id, 'EOQ': 50}
 
     predictor = build_predictor(args, tokenizer, symbols, model, logger)
     predictor.translate(test_iter, step)
@@ -255,8 +255,13 @@ def test_text_abs(args, device_id, pt, step):
                                        args.test_batch_size, device,
                                        shuffle=False, is_test=True)
     tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', do_lower_case=True, cache_dir=args.temp_dir)
-    symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
-               'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+    # symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
+    #            'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+
+
+    symbols = {'BOS': tokenizer.bos_token_id, 'EOS': tokenizer.eos_token_id,
+               'PAD': tokenizer.pad_token_id, 'EOQ': 50}
+
     predictor = build_predictor(args, tokenizer, symbols, model, logger)
     predictor.translate(test_iter, step)
 
@@ -337,7 +342,7 @@ def train_abs_single(args, device_id):
     #            'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
 
     symbols = {'BOS': tokenizer.bos_token_id, 'EOS': tokenizer.eos_token_id,
-               'PAD': tokenizer.pad_token_id, 'EOQ': tokenizer.vocab_size + 1}
+               'PAD': tokenizer.pad_token_id, 'EOQ': 50}
 
 
     train_loss = abs_loss(model.generator, symbols, model.vocab_size, device, train=True,
