@@ -8,6 +8,7 @@ from torch.nn.init import xavier_uniform_
 from models.decoder import TransformerDecoder
 from models.encoder import Classifier, ExtTransformerEncoder
 from models.optimizers import Optimizer
+from transformers import AutoModel, AutoTokenizer
 
 def build_optim(args, model, checkpoint):
     """ Build optimizer """
@@ -116,9 +117,9 @@ class Bert(nn.Module):
     def __init__(self, large, temp_dir, finetune=False):
         super(Bert, self).__init__()
         if(large):
-            self.model = BertModel.from_pretrained('bert-large-uncased', cache_dir=temp_dir)
+            self.model = AutoModel.from_pretrained('vinai/phobert-base', cache_dir=temp_dir)
         else:
-            self.model = BertModel.from_pretrained('bert-base-uncased', cache_dir=temp_dir)
+            self.model = AutoModel.from_pretrained('vinai/phobert-base', cache_dir=temp_dir)
 
         self.finetune = finetune
 
