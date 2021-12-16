@@ -188,8 +188,11 @@ def validate(args, device_id, pt, step):
                                         shuffle=False, is_test=False)
 
     tokenizer = AutoTokenizer.from_pretrained('vinai/phobert-base', do_lower_case=True, cache_dir=args.temp_dir)
-    symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
-               'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+    # symbols = {'BOS': tokenizer.vocab['[unused0]'], 'EOS': tokenizer.vocab['[unused1]'],
+    #            'PAD': tokenizer.vocab['[PAD]'], 'EOQ': tokenizer.vocab['[unused2]']}
+
+    symbols = {'BOS': tokenizer.bos_token_id, 'EOS': tokenizer.eos_token_id,
+               'PAD': tokenizer.pad_token_id, 'EOQ': tokenizer.vocab_size + 1}
 
     valid_loss = abs_loss(model.generator, symbols, model.vocab_size, train=False, device=device)
 
